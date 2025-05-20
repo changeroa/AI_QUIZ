@@ -7,7 +7,7 @@ import json
 import sys
 import os
 from typing import Dict, List, Optional
-
+###
 class PDFExtractor:
     """
     PDF text extraction using PyMuPDF as primary method with Tesseract OCR fallback
