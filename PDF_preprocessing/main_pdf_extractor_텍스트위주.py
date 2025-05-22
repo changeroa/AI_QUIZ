@@ -45,17 +45,23 @@ print("[텍스트]", extracted_text_llm_modify)
 
 # PART 3: Prompt with System and Human Messages (Using Tuples)
 messages = [
-            ("system", "너는 고급 문장 교정 및 청킹을 전문으로 하는 AI야. 사용자가 입력한 텍스트에 대해 다음 작업을 수행해.\n\n"
-"1. 먼저, 문법, 철자, 오타를 모두 자연스럽고 정확하게 교정해. 의미를 보존하되, 가능한 한 자연스러운 현대 한국어 표현으로 바꿔.\n"
-"2. 교정된 문장들을 의미 단위로 묶어서 단락을 나눠줘. 이때 연관된 주제끼리 한 단락에 들어가도록 하고, 단락마다 번호를 붙여: 예) '1', '2', '3'...\n"
-"3. 출력은 반드시 교정된 문장과 번호가 매겨진 단락으로 구성된 최종 텍스트만 보여줘. 그 외의 설명, 시스템 메시지, 메타 정보는 절대 출력하지 마.\n"
-"단, 오타 교정이 끝난 문장은 재배열하거나 단락으로 묶을 수는 있지만 내용이나 표현을 다시 수정하거나 바꿔서는 안 돼."
-),
-
-            ("human", 
-"다음 텍스트의 오타를 교정하고 문장을 자연스럽게 정리해줘. 그 다음, 연관된 내용끼리 단락을 나눠서 묶고 단락마다 숫자를 붙여. 단락마다 반드시 번호를 붙여 예) '1', '2', '3'...\n 그 외에는 아무것도 출력하지 마. :  \n\n{text}"),
-
-        ]
+    (
+        "system",
+        "너는 고급 문장 교정 및 단락 구성을 전문으로 하는 AI야.\n\n"
+        "다음 작업을 반드시 정확히 수행해:\n"
+        "1. 사용자의 텍스트에서 오타, 문법 오류, 비문 등을 모두 자연스럽고 정확하게 교정해. 단, 의미는 절대로 바꾸지 마.\n"
+        "2. 교정된 문장을 의미 단위로 묶어, 논리적으로 연결되는 문장끼리 하나의 단락으로 만들어.\n"
+        "3. 각 단락의 맨 앞에 반드시 아라비아 숫자로 번호를 붙여. 형식은 무조건 다음과 같아: 숫자 + 마침표 + 공백 (예: '1. ', '2. ', '3. ')\n"
+        "4. 출력 결과는 오직 번호가 붙은 단락들로만 구성해야 해. 다른 정보, 설명, 시스템 메시지는 절대 포함하지 마.\n"
+        "5. 단락 번호는 반드시 누락 없이 순차적으로 붙어야 하며, 각 단락은 줄바꿈으로 구분되어야 해.\n\n"
+        "이 규칙은 절대 변경하거나 생략해서는 안 돼. 지켜지지 않으면 출력은 무효야."
+    ),
+    (
+        "human",
+        "다음 텍스트를 오타 교정하고 자연스럽게 정리한 뒤, 의미 단위로 나누고 각 단락마다 반드시 번호를 붙여줘.\n"
+        "번호 형식은 반드시 '1. ', '2. ', '3. '로 해. 이외에는 절대 출력하지 마:\n\n{text}"
+    )
+]
 prompt_template = ChatPromptTemplate.from_messages(messages)
 prompt = prompt_template.invoke({"text": extracted_text_llm_modify})
 #디폴트로 model변수의 AI 모델을 쓰는거임?
@@ -69,17 +75,6 @@ extracted_text_llm_modify = llm.invoke(prompt)
 # =================
 
 
-
-
-# # 텍스트와 주석 저장할 파일 경로
-# text_output_path = os.path.join(output_folder, "pageAll_text.txt")
-# # annot_output_path = os.path.join(output_folder, "page_annotations.txt")
-
-
-# # 텍스트 저장
-# with open(text_output_path, "w", encoding="utf-8") as f:
-#     f.write(text)
-#     print(f"[✔] 전체페이지 텍스트 저장됨: {text_output_path}")
 
 # 오타 교정된 텍스트 저장
 corrected_output_path = os.path.join(output_folder, "pageAll_text_llm_modify.txt")  # 원하는 경로/파일명으로 수정 가능
