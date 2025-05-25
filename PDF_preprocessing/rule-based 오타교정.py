@@ -1,7 +1,8 @@
 from transformers import PreTrainedTokenizerFast, BartForConditionalGeneration
 
-tokenizer = PreTrainedTokenizerFast.from_pretrained("9bow/kobart-gec")
-model = BartForConditionalGeneration.from_pretrained("9bow/kobart-gec")
+
+tokenizer = PreTrainedTokenizerFast.from_pretrained("hyunwoongko/kobart")
+model = BartForConditionalGeneration.from_pretrained("hyunwoongko/kobart")
 
 input_text = "나는 어제 도서관에 가따."
 input_ids = tokenizer.encode(input_text, return_tensors="pt")
